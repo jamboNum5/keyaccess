@@ -44,12 +44,12 @@ class keyaccess::install {
     enable => true,
   }
 
-  file { '/usr/share/ka/ka.xml':
-    ensure  => file,
-    #source => 'puppet:///modules/keyaccess/ka/ka.xml',
-    content => template('keyaccess/ka.xml.erb'),
-    notify  => Service['keyaccess'],
-  }
+  #file { '/usr/share/ka/ka.xml':
+  #  ensure  => file,
+  #  #source => 'puppet:///modules/keyaccess/ka/ka.xml',
+  #  content => template('keyaccess/ka.xml.erb'),
+  #  notify  => Service['keyaccess'],
+  #}
 
   # Remove legacy incorrect systemd file, fallback to default: 
   # /etc/systemd/system/multi-user.target.wants/keyaccess.service
