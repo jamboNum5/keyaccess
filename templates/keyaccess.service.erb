@@ -1,0 +1,21 @@
+#
+#       (c) Sassafras Software Inc.
+#
+# File Managed by Puppet
+#
+
+[Unit]
+Description=Sassafras KeyServer Platform client daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/libexec/karl -d -i /run/keyaccess.pid $OPTIONS
+PIDFile=/run/keyaccess.pid
+KillMode=process
+TimeoutStopSec=20s
+NoNewPrivileges=true
+Environment="KA_SERVERHOST=<%= scope.lookupvar("keyaccess::ka_hostname") %>"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!-- Managed by Puppet -->
+<dict>
+	<key>comp</key>
+	<integer>0</integer>
+	<key>global</key>
+	<integer>0</integer>
+	<key>host</key>
+	<string><%= scope.lookupvar("keyaccess::ka_hostname") %></string>
+	<key>kamigate</key>
+	<integer>0</integer>
+	<key>lock</key>
+	<integer>0</integer>
+	<key>name</key>
+	<integer>0</integer>
+	<key>options</key>
+	<dict>
+		<key>lastserver</key>
+		<string><%= scope.lookupvar("keyaccess::ka_hostname") %></string>
+	</dict>
+	<key>site</key>
+	<string></string>
+</dict>
+</plist>
