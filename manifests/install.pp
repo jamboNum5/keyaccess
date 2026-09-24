@@ -10,6 +10,7 @@
 class keyaccess::install {
   require 'ufw'
 
+  # Only run if keyaccess versions are out of sync
   if ( $facts['keyaccess_version'] != $keyaccess::keyaccess_version) {
     notify { 'Installing Keyaccess' :
       message => $keyaccess::keyaccess_version,
@@ -21,13 +22,12 @@ class keyaccess::install {
       source => 'puppet:///modules/keyaccess/KeyAccess.deb',
       path   => '/tmp/KeyAccess.deb',
     }
-  }
-  # Install with dpkg with env variable
-  exec { 'keyaccess_install' :
-    command     => '/usr/bin/dpkg -i /tmp/KeyAccess.deb',
-    #unless      => '/usr/bin/dpkg -l keyaccess',
-    onlyif      => '/usr/bin/test -f /tmp/KeyAccess.deb',
-    environment => "KA_SERVERHOST=${keyaccess::ka_hostname}",
+    # Install with dpkg with env variable
+    exec { 'keyaccess_install' :
+      command     => '/usr/bin/dpkg -i /tmp/KeyAccess.deb',
+      require     => File['keyaccess_deb'],
+      environment => "KA_SERVERHOST=${keyaccess::ka_hostname}",
+    }
   }
 
   # Require Firewall Rule for 19283
@@ -44,18 +44,12 @@ class keyaccess::install {
     enable => true,
   }
 
-  #file { '/usr/share/ka/ka.xml':
-  #  ensure  => file,
-  #  #source => 'puppet:///modules/keyaccess/ka/ka.xml',
-  #  content => template('keyaccess/ka.xml.erb'),
-  #  notify  => Service['keyaccess'],
-  #}
-
-  # Remove legacy incorrect systemd file, fallback to default: 
-  # /etc/systemd/system/multi-user.target.wants/keyaccess.service
-  #file { 'keyaccess.service.rm':
-  #  ensure => 'file',
-  #  path   => '/etc/systemd/system/keyaccess.service',
-  #  notify => Exec['daemon_reload'],
-  #}
+  # Fix incorrect systemd file, fallback to default: 
+  # linked to: /etc/systemd/system/multi-user.target.wants/keyaccess.service
+  file { 'keyaccess.service':
+    ensure => 'file',
+    path   => '/etc/systemd/system/keyaccess.service',
+    source => 'puppet:///modules/keyaccess/keyaccess.service',
+    notify => [Exec['daemon_reload'],Service['keyaccess']],
+  }
 }

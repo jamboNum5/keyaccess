@@ -17,7 +17,6 @@ class keyaccess (
 ) {
   if ( $keyaccess_install == true) {
     include keyaccess::install
-
   } else { # Remove KeyAccess
     package { 'keyaccess' :
       ensure => 'absent',
