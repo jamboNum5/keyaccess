@@ -25,8 +25,8 @@ class keyaccess::install {
   # Install with dpkg with env variable
   exec { 'keyaccess_install' :
     command     => '/usr/bin/dpkg -i /tmp/KeyAccess.deb',
-    #require     => File['keyaccess_deb'],
-    unless      => '/usr/bin/dpkg -l keyaccess',
+    #unless      => '/usr/bin/dpkg -l keyaccess',
+    onlyif      => '/usr/bin/test -f /tmp/KeyAccess.deb',
     environment => "KA_SERVERHOST=${keyaccess::ka_hostname}",
   }
 
